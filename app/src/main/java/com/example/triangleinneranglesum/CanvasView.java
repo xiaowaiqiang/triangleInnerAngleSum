@@ -28,7 +28,7 @@ public class CanvasView extends View {
 
     private Paint oriPaint, changePaint, cutPaint, cutPaint2, anglePaint, anglePaint2;
     private LinkedList<Object> objectList;
-    private List<Line> lineList;
+    public List<Line> lineList;
     private Random random;
     public final static int STATE_MOVE = 1;
     public final static int STATE_ROTATE = 2;
@@ -109,8 +109,14 @@ public class CanvasView extends View {
 //                        canvas.drawText(((Triangle) o).getAngleTexts()[i], ((Triangle) o).getX(i), ((Triangle) o).getY(i) - 20, anglePaint);
                         float destX = ((Triangle) o).getCenterP().x - ((Triangle) o).getX(i);
                         float destY = ((Triangle) o).getCenterP().y - ((Triangle) o).getY(i);
-                        int n = Math.abs(destX) < 102 && Math.abs(destY) < 134 ? 2 : 3;
-//                        Log.e("BBB", "DESTX:" + ((Triangle) o).getAngleTexts()[i] + ":" + destX + "," + destY + "-------" + n);
+                        float n = 1.4f;
+                        if (((Triangle) o).isCanCut()) {
+                            n = Math.abs(destX) < 102 && Math.abs(destY) < 134 ? 2 : 3;
+                        }
+                        if (Math.abs(Math.abs(destX)-50)<10&&Math.abs(50-destY)<10){
+                            n = 1.0f;
+                        }
+                        Log.e("BBB", "DESTX" + ((Triangle) o).getAngleTexts()[i] + ":  " + destX + " , " + destY + "-------" + n);
                         canvas.drawText(((Triangle) o).getAngleTexts()[i], ((Triangle) o).getX(i) + destX / n, ((Triangle) o).getY(i) + destY / n, anglePaint);
                         canvas.drawCircle(((Triangle) o).getX(i), ((Triangle) o).getY(i), 40, anglePaint2);
                     }
@@ -189,13 +195,13 @@ public class CanvasView extends View {
                                 Toast.makeText(getContext(), "切割后的三角形不能再继续标角！", Toast.LENGTH_SHORT).show();
                             }
                         }
-                        if (!"4".equals(((Triangle) o).getAngleIndex())){
+                        if (!"4".equals(((Triangle) o).getAngleIndex())) {
                             showNext = false;
                         }
                     }
                 }
-                if (showNext){
-                    ((MainActivity)context).showNext();
+                if (showNext) {
+                    ((MainActivity) context).showNext();
                 }
                 break;
         }
@@ -254,7 +260,7 @@ public class CanvasView extends View {
                             pre_Y = b;
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            ((Triangle) o).setMove(a - pre_X, b - pre_Y);
+                            ((Triangle) o).setMove(a - pre_X, b - pre_Y, getHeight(), getWidth());
                             pre_X = a;
                             pre_Y = b;
                             /*Matrix matrix1 = new Matrix();
@@ -330,26 +336,26 @@ public class CanvasView extends View {
                     PointF p23 = getIntersectPoint(cutLine, curTri.getX2(), curTri.getY2(), curTri.getX3(), curTri.getY3());
                     if (p12 != null && p13 != null && p23 != null) {
                         Toast.makeText(getContext(), "不能切到顶点上哦，重新切一下吧", Toast.LENGTH_SHORT).show();
-                    } else if (p12 != null && p13 != null) {
+                    } else if (p12 != null && p13 != null&& curTri.getCanCut(1)) {
                         Triangle t1 = new Triangle(curTri.getX1(), curTri.getY1(), p13.x, p13.y, p12.x, p12.y, getChangeColor(), false);
                         t1.getAngleTexts()[0] = curTri.getAngleTexts()[0];
                         objectList.addLast(t1);
                         lineList.add(new Line(p12, p13));
-                        curTri.addCutNum();
-                    } else if (p12 != null && p23 != null) {
+                        curTri.addCutNum(1);
+                    } else if (p12 != null && p23 != null&& curTri.getCanCut(2)) {
                         Triangle t2 = new Triangle(p12.x, p12.y, curTri.getX2(), curTri.getY2(), p23.x, p23.y, getChangeColor(), false);
                         t2.getAngleTexts()[1] = curTri.getAngleTexts()[1];
                         objectList.addLast(t2);
                         lineList.add(new Line(p12, p23));
-                        curTri.addCutNum();
-                    } else if (p13 != null && p23 != null) {
+                        curTri.addCutNum(2);
+                    } else if (p13 != null && p23 != null && curTri.getCanCut(3)) {
                         Triangle t3 = new Triangle(p23.x, p23.y, p13.x, p13.y, curTri.getX3(), curTri.getY3(), getChangeColor(), false);
                         t3.getAngleTexts()[2] = curTri.getAngleTexts()[2];
                         objectList.addLast(t3);
                         lineList.add(new Line(p23, p13));
-                        curTri.addCutNum();
+                        curTri.addCutNum(3);
                     }
-                    if (curTri.getCutNum() == 3) {
+                    if (curTri.getCutNumAll() == 3) {
                         objectList.remove(curTri);
                         lineList.clear();
                     }
@@ -375,7 +381,7 @@ public class CanvasView extends View {
         }
     }
 
-    private int[] colors = {R.color.color_yellow, R.color.color_blue, R.color.color_green, R.color.color_pink, R.color.color_purple, R.color.color_orange, R.color.color_purple1, R.color.color_cyan};
+    private int[] colors = {R.color.color_purple1,R.color.color_yellow, R.color.color_cyan, R.color.color_green, R.color.color_pink, R.color.color_purple, R.color.color_orange, R.color.color_blue};
     private int colorNum = 0;
 
     private int getChangeColor() {
@@ -404,13 +410,13 @@ public class CanvasView extends View {
     public void addR1() {
         objectList.addFirst(new Rectangle(450, 100, 750, 400));
         invalidate();
-        ((MainActivity)context).showNext();
+        ((MainActivity) context).showNext();
     }
 
     public void addR2() {
         objectList.addFirst(new Rectangle(650, 100, 1050, 400));
         invalidate();
-        ((MainActivity)context).showNext();
+        ((MainActivity) context).showNext();
     }
 
     public void setState(int state) {
@@ -418,11 +424,23 @@ public class CanvasView extends View {
         lineList.clear();
     }
 
+    public int getState() {
+        return state;
+    }
+
     public void setOnlyOne() {
-        Object obj = objectList.getFirst();
-        objectList.clear();
-        objectList.add(obj);
-        invalidate();
+        Object obj = null;
+        for (Object item:objectList) {
+            if (item instanceof Triangle && ((Triangle) item).isCanCut() && ((Triangle) item).getAngleIndex().equals("4")){
+                obj = item;
+                break;
+            }
+        }
+        if (obj != null) {
+            objectList.clear();
+            objectList.add(obj);
+            invalidate();
+        }
     }
 
     /**
@@ -459,6 +477,9 @@ public class CanvasView extends View {
         if (y < Math.min(y3, y4) || y > Math.max(y3, y4)) {
             return null;
         }
+        //强制中点切割
+        x = (x3 + x4) / 2;
+        y = (y3 + y4) / 2;
         return new PointF(x, y);
     }
 
@@ -468,6 +489,7 @@ public class CanvasView extends View {
 
     public void clearAll() {
         objectList.clear();
+        lineList.clear();
         invalidate();
     }
 }

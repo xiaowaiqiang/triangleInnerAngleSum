@@ -15,7 +15,7 @@ public class Triangle {
     private float degrees;
     private String[] angleTexts;
     private boolean canCut;
-    private int cutNum;
+    private int[] cutNum;
 
     public Triangle(float x1, float y1, float x2, float y2, float x3, float y3, int color) {
         init(x1, y1, x2, y2, x3, y3, color, true);
@@ -40,7 +40,7 @@ public class Triangle {
         this.path.lineTo(this.x3, this.y3);
         this.angleTexts = new String[3];
         this.canCut = canCut;
-        this.cutNum = 0;
+        this.cutNum = new int[3];
     }
 
     /**
@@ -134,14 +134,14 @@ public class Triangle {
      * @param moveX
      * @param moveY
      */
-    public void setMove(float moveX, float moveY) {
+    public void setMove(float moveX, float moveY,int maxH,int maxW) {
         float x1n = x1 + moveX;
         float y1n = y1 + moveY;
         float x2n = x2 + moveX;
         float y2n = y2 + moveY;
         float x3n = x3 + moveX;
         float y3n = y3 + moveY;
-        if (x1n>0&&x2n>0&&x3n>0&&y1n>0&&y2n>0&&y3n>0&&x1n<1140&&x2n<1140&&x3n<1140&&y1n<720&&y2n<720&&y3n<720){
+        if (x1n>0&&x2n>0&&x3n>0&&y1n>0&&y2n>0&&y3n>0&&x1n<maxW&&x2n<maxW&&x3n<maxW&&y1n<maxH&&y2n<maxH&&y3n<maxH){
             this.x1 = x1 + moveX;
             this.y1 = y1 + moveY;
             this.x2 = x2 + moveX;
@@ -304,11 +304,20 @@ public class Triangle {
         }
     }
 
-    public int getCutNum() {
-        return cutNum;
+    public int getCutNumAll() {
+        int r = 0;
+        for (int i : cutNum) {
+            r += i;
+        }
+        return r;
     }
 
-    public void addCutNum() {
-        this.cutNum = this.cutNum +1;
+    public boolean getCanCut(int index) {
+        return (cutNum[index-1]==0);
+    }
+
+    public void addCutNum(int index) {
+//        this.cutNum = this.cutNum +1;
+        this.cutNum[index-1] = 1;
     }
 }
