@@ -45,6 +45,7 @@ public class Triangle {
 
     /**
      * 已知三角形三个点，中线的交点，中点
+     *
      * @param p1
      * @param p2
      * @param p3
@@ -61,6 +62,7 @@ public class Triangle {
 
     /**
      * 获取两条直线相交的点
+     *
      * @param l1
      * @param l2
      * @return
@@ -131,17 +133,18 @@ public class Triangle {
 
     /**
      * 根据中点的移动距离给每个顶点移动相同的距离
+     *
      * @param moveX
      * @param moveY
      */
-    public void setMove(float moveX, float moveY,int maxH,int maxW) {
+    public void setMove(float moveX, float moveY, int maxH, int maxW) {
         float x1n = x1 + moveX;
         float y1n = y1 + moveY;
         float x2n = x2 + moveX;
         float y2n = y2 + moveY;
         float x3n = x3 + moveX;
         float y3n = y3 + moveY;
-        if (x1n>0&&x2n>0&&x3n>0&&y1n>0&&y2n>0&&y3n>0&&x1n<maxW&&x2n<maxW&&x3n<maxW&&y1n<maxH&&y2n<maxH&&y3n<maxH){
+        if (x1n > 0 && x2n > 0 && x3n > 0 && y1n > 0 && y2n > 0 && y3n > 0 && x1n < maxW && x2n < maxW && x3n < maxW && y1n < maxH && y2n < maxH && y3n < maxH) {
             this.x1 = x1 + moveX;
             this.y1 = y1 + moveY;
             this.x2 = x2 + moveX;
@@ -158,9 +161,10 @@ public class Triangle {
 
     /**
      * 3个顶点围绕中心点旋转后的坐标
+     *
      * @param angle
      */
-    public void setRotate(float angle) {
+    public void setRotate(float angle, int maxH, int maxW) {
         PointF p1 = new PointF(x1, y1);
         PointF p2 = new PointF(x2, y2);
         PointF p3 = new PointF(x3, y3);
@@ -170,6 +174,13 @@ public class Triangle {
         this.y2 = calcNewPoint(p2, 90).y;
         this.x3 = calcNewPoint(p3, 90).x;
         this.y3 = calcNewPoint(p3, 90).y;
+        //旋转后如果越界了，自动移回边界内部
+        getCrossBorderX(x1, maxW);
+        getCrossBorderX(x2, maxW);
+        getCrossBorderX(x3, maxW);
+        getCrossBorderY(y1, maxH);
+        getCrossBorderY(y2, maxH);
+        getCrossBorderY(y3, maxH);
         this.centerP = getTriangleCenterPoint(new PointF(x1, y1), new PointF(x2, y2), new PointF(x3, y3));
         this.path.reset();
         this.path.moveTo(this.x1, this.y1);
@@ -177,8 +188,39 @@ public class Triangle {
         this.path.lineTo(this.x3, this.y3);
     }
 
+    private void getCrossBorderX(float f, int max) {
+        if (f < 0) {
+            float d = Math.abs(f);
+            this.x1 = this.x1 + d;
+            this.x2 = this.x2 + d;
+            this.x3 = this.x3 + d;
+        }
+        if (f > max) {
+            float d = f - max;
+            this.x1 = this.x1 - d;
+            this.x2 = this.x2 - d;
+            this.x3 = this.x3 - d;
+        }
+    }
+
+    private void getCrossBorderY(float f, int max) {
+        if (f < 0) {
+            float d = Math.abs(f);
+            this.y1 = this.y1 + d;
+            this.y2 = this.y2 + d;
+            this.y3 = this.y3 + d;
+        }
+        if (f > max) {
+            float d = f - max;
+            this.y1 = this.y1 - d;
+            this.y2 = this.y2 - d;
+            this.y3 = this.y3 - d;
+        }
+    }
+
     /**
      * 点围绕中心点旋转后的坐标
+     *
      * @param p
      * @param angle
      * @return
@@ -291,14 +333,14 @@ public class Triangle {
         return canCut;
     }
 
-    public PointF getPointF(int index){
-        switch (index){
+    public PointF getPointF(int index) {
+        switch (index) {
             case 1:
-                return new PointF(x1,y1);
+                return new PointF(x1, y1);
             case 2:
-                return new PointF(x2,y2);
+                return new PointF(x2, y2);
             case 3:
-                return new PointF(x3,y3);
+                return new PointF(x3, y3);
             default:
                 return null;
         }
@@ -313,11 +355,11 @@ public class Triangle {
     }
 
     public boolean getCanCut(int index) {
-        return (cutNum[index-1]==0);
+        return (cutNum[index - 1] == 0);
     }
 
     public void addCutNum(int index) {
 //        this.cutNum = this.cutNum +1;
-        this.cutNum[index-1] = 1;
+        this.cutNum[index - 1] = 1;
     }
 }
