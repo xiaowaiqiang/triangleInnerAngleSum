@@ -34,6 +34,7 @@ public class CanvasView extends View {
     public final static int STATE_ROTATE = 2;
     public final static int STATE_CUT = 3;
     public final static int STATE_ANGLE = 4;
+    public final static int STATE_MIRROR = 5;
     private int state = STATE_MOVE;
     private Matrix matrix;
     private CutLine cutLine;
@@ -155,6 +156,9 @@ public class CanvasView extends View {
             case STATE_ROTATE:
                 rotate(event);
                 return true;
+            case STATE_MIRROR:
+                mirror(event);
+                return true;
             case STATE_ANGLE:
                 angle(event);
                 return true;
@@ -218,7 +222,25 @@ public class CanvasView extends View {
                         matrix.postRotate(90, ((Triangle) o).getCenterP().x, ((Triangle) o).getCenterP().y);
                         ((Triangle) o).getPath().transform(matrix);
                         ((Triangle) o).setDegrees(((Triangle) o).getDegrees() + 90);*/
-                        ((Triangle) o).setRotate(90);
+                        ((Triangle) o).setRotate(90, getHeight(), getWidth());
+                        objectList.remove(o);
+                        objectList.addFirst(o);
+                        invalidate();
+                    }
+                    return;
+                }
+            }
+        }
+    }
+
+    private void mirror(MotionEvent event) {
+        float a = event.getX();
+        float b = event.getY();
+        for (Object o : objectList) {
+            if (o instanceof Triangle) {
+                if (((Triangle) o).isInTriangle(new PointF(a, b))) {
+                    if (event.getAction() == MotionEvent.ACTION_UP) {
+                        ((Triangle) o).setMirror(getHeight(), getWidth());
                         objectList.remove(o);
                         objectList.addFirst(o);
                         invalidate();
@@ -390,20 +412,20 @@ public class CanvasView extends View {
         return colors[colorNum % colors.length];
     }
 
-    public void addT1() {
-        objectList.addFirst(new Triangle(100, 100, 100, 400, 400, 400, getChangeColor()));
+    public void addT1(int curNum) {
+        objectList.addFirst(new Triangle(100+curNum*60, 100, 100+curNum*60, 400, 400+curNum*60, 400, getChangeColor()));
         invalidate();
     }
 
-    public void addT2() {
+    public void addT2(int curNum) {
 //        objectList.addFirst(new Triangle(400, 100, 350, 300, 550, 300, getChangeColor()));
-        objectList.addFirst(new Triangle(200, 100, 100, 400, 400, 400, getChangeColor()));
+        objectList.addFirst(new Triangle(200+curNum*60, 100, 100+curNum*60, 400, 400+curNum*60, 400, getChangeColor()));
         invalidate();
     }
 
-    public void addT3() {
+    public void addT3(int curNum) {
 //        objectList.addFirst(new Triangle(550, 100, 600, 300, 800, 300, getChangeColor()));
-        objectList.addFirst(new Triangle(50, 100, 100, 400, 400, 400, getChangeColor()));
+        objectList.addFirst(new Triangle(50+curNum*60, 100, 100+curNum*60, 400, 400+curNum*60, 400, getChangeColor()));
         invalidate();
     }
 

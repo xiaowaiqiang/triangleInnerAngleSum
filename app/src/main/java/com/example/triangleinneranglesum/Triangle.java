@@ -188,6 +188,21 @@ public class Triangle {
         this.path.lineTo(this.x3, this.y3);
     }
 
+    public void setMirror(int maxH, int maxW) {
+        this.x1 = centerP.x*2-this.x1;
+        this.x2 = centerP.x*2-this.x2;
+        this.x3 = centerP.x*2-this.x3;
+        //旋转后如果越界了，自动移回边界内部
+        getCrossBorderX(x1, maxW);
+        getCrossBorderX(x2, maxW);
+        getCrossBorderX(x3, maxW);
+        this.centerP = getTriangleCenterPoint(new PointF(x1, y1), new PointF(x2, y2), new PointF(x3, y3));
+        this.path.reset();
+        this.path.moveTo(this.x1, this.y1);
+        this.path.lineTo(this.x2, this.y2);
+        this.path.lineTo(this.x3, this.y3);
+    }
+
     private void getCrossBorderX(float f, int max) {
         if (f < 0) {
             float d = Math.abs(f);

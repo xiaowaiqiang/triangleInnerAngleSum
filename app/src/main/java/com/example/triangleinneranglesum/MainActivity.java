@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView mIvT1, mIvT2, mIvT3, mIvR1, mIvR2, mIvNext;
     private CanvasView canvasView;
     private RadioGroup radioGroup;
-    private RadioButton mRbCut, mRbRotate, mRbMove;
+    private RadioButton mRbCut, mRbRotate, mRbMove,mRbMirror;
     private String curType;
     private int curNum;
 
@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         canvasView = findViewById(R.id.cv);
         mRbCut = findViewById(R.id.rb_cut);
         mRbMove = findViewById(R.id.rb_move);
+        mRbMirror = findViewById(R.id.rb_mirror);
         mRbRotate = findViewById(R.id.rb_rotate);
         mIvNext = findViewById(R.id.iv_next);
         mIvT1.setOnClickListener(this);
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (curType == "" || curType.equals("t1")) {
                     curType = "t1";
                     if (curNum < 6) {
-                        canvasView.addT1();
+                        canvasView.addT1(curNum);
                         curNum++;
                     }
                 }
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (curType == "" || curType.equals("t2")) {
                     curType = "t2";
                     if (curNum < 6) {
-                        canvasView.addT2();
+                        canvasView.addT2(curNum);
                         curNum++;
                     }
                 }
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (curType == "" || curType.equals("t3")) {
                     curType = "t3";
                     if (curNum < 6) {
-                        canvasView.addT3();
+                        canvasView.addT3(curNum);
                         curNum++;
                     }
                 }
@@ -94,6 +95,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             radioGroup.check(R.id.rb_cut);
         } else {
             canvasView.setState(CanvasView.STATE_ROTATE);
+        }
+    }
+
+    public void mirror(View view){
+        if (curType.startsWith("r")){
+            canvasView.setState(CanvasView.STATE_MIRROR);
         }
     }
 
@@ -130,6 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mIvNext.setVisibility(View.GONE);
         mRbCut.setVisibility(View.GONE);
         mRbRotate.setVisibility(View.GONE);
+        mRbMirror.setVisibility(View.GONE);
         mIvNext.setVisibility(View.GONE);
         canvasView.setState(CanvasView.STATE_MOVE);
         radioGroup.check(R.id.rb_move);
@@ -138,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void next(View view) {
         mRbCut.setVisibility(View.VISIBLE);
         mRbRotate.setVisibility(View.VISIBLE);
+        mRbMirror.setVisibility(View.VISIBLE);
     }
 
     public void showNext() {

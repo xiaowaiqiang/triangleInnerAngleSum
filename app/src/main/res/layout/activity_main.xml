@@ -28,14 +28,14 @@
             android:layout_width="100dp"
             android:layout_height="90dp"
             android:src="@mipmap/t1"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_t2"
             android:layout_width="100dp"
             android:layout_height="90dp"
             android:src="@mipmap/t2"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_t3"
@@ -55,86 +55,101 @@
             android:layout_width="100dp"
             android:layout_height="70dp"
             android:src="@mipmap/r2" />
+
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/btn_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/button_bg"
+                android:onClick="clear"
+                android:padding="5dp"
+                android:src="@mipmap/clear"
+                android:visibility="visible" />
+
+            <RadioButton
+                android:id="@+id/rb_move"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/button_bg"
+                android:button="@null"
+                android:checked="false"
+                android:drawableRight="@mipmap/move"
+                android:onClick="move"
+                android:padding="5dp" />
+
+            <RadioButton
+                android:id="@+id/rb_angle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/button_bg"
+                android:button="@null"
+                android:checked="false"
+                android:drawableRight="@mipmap/angle"
+                android:onClick="angle"
+                android:padding="5dp" />
+
+            <ImageView
+                android:id="@+id/iv_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/button_bg"
+                android:onClick="next"
+                android:padding="5dp"
+                android:src="@mipmap/next"
+                android:visibility="gone" />
+
+            <RadioButton
+                android:id="@+id/rb_cut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/button_bg"
+                android:button="@null"
+                android:checked="false"
+                android:drawableRight="@mipmap/cut"
+                android:onClick="cut"
+                android:padding="5dp"
+                android:visibility="gone" />
+
+            <RadioButton
+                android:id="@+id/rb_rotate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/button_bg"
+                android:button="@null"
+                android:checked="false"
+                android:drawableRight="@mipmap/rotate"
+                android:onClick="rotate"
+                android:padding="5dp"
+                android:visibility="gone" />
+
+            <RadioButton
+                android:id="@+id/rb_mirror"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/button_bg"
+                android:button="@null"
+                android:checked="false"
+                android:onClick="mirror"
+                android:padding="5dp"
+                android:drawableRight="@mipmap/mirror"
+                android:visibility="gone" />
+
+        </RadioGroup>
     </LinearLayout>
-
-    <RadioGroup
-        android:id="@+id/radio_group"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/btn_clear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/button_bg"
-            android:onClick="clear"
-            android:padding="5dp"
-            android:src="@mipmap/clear"
-            android:visibility="visible" />
-        <RadioButton
-            android:id="@+id/rb_move"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/button_bg"
-            android:button="@null"
-            android:checked="false"
-            android:drawableRight="@mipmap/move"
-            android:onClick="move"
-            android:padding="5dp"/>
-        <RadioButton
-            android:id="@+id/rb_angle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/button_bg"
-            android:button="@null"
-            android:checked="false"
-            android:drawableRight="@mipmap/angle"
-            android:onClick="angle"
-            android:padding="5dp" />
-
-        <ImageView
-            android:id="@+id/iv_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/button_bg"
-            android:onClick="next"
-            android:padding="5dp"
-            android:src="@mipmap/next"
-            android:visibility="gone" />
-
-        <RadioButton
-            android:id="@+id/rb_cut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/button_bg"
-            android:button="@null"
-            android:checked="false"
-            android:drawableRight="@mipmap/cut"
-            android:onClick="cut"
-            android:padding="5dp"
-            android:visibility="gone" />
-
-        <RadioButton
-            android:id="@+id/rb_rotate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/button_bg"
-            android:button="@null"
-            android:checked="false"
-            android:drawableRight="@mipmap/rotate"
-            android:onClick="rotate"
-            android:padding="5dp"
-            android:visibility="gone" />
-
-    </RadioGroup>
 
 </LinearLayout>
